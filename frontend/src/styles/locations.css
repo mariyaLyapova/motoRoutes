@@ -1,0 +1,218 @@
+/* Location Management Styles */
+
+.location-list-container {
+  margin-top: 20px;
+}
+
+.location-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.location-list-header h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.btn-add-location {
+  padding: 10px 20px;
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-add-location:hover {
+  background-color: #229954;
+}
+
+/* Location Form */
+
+.location-form-container {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 2px dashed #ddd;
+}
+
+.location-form-container h3 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.location-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.location-form .form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.btn-cancel {
+  padding: 10px 20px;
+  background-color: #95a5a6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-cancel:hover {
+  background-color: #7f8c8d;
+}
+
+/* Location List */
+
+.locations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.location-item {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  background: white;
+  transition: box-shadow 0.3s;
+}
+
+.location-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.location-content {
+  flex: 1;
+}
+
+.location-header {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 10px;
+  align-items: flex-start;
+}
+
+.location-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.location-info {
+  flex: 1;
+}
+
+.location-info h3 {
+  font-size: 18px;
+  color: #333;
+  margin: 0 0 5px 0;
+}
+
+.location-type {
+  color: #999;
+  font-size: 13px;
+  text-transform: capitalize;
+}
+
+.location-description {
+  color: #666;
+  line-height: 1.6;
+  margin: 10px 0;
+}
+
+.location-coords {
+  color: #999;
+  font-size: 13px;
+  font-family: monospace;
+  margin-top: 10px;
+}
+
+.location-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.btn-edit-small,
+.btn-delete-small {
+  padding: 6px 15px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-edit-small {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.btn-edit-small:hover {
+  background-color: #357abd;
+}
+
+.btn-delete-small {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.btn-delete-small:hover {
+  background-color: #c0392b;
+}
+
+.no-locations {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+  background: #f8f9fa;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+/* Responsive Design */
+
+@media (max-width: 768px) {
+  .location-list-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .btn-add-location {
+    width: 100%;
+  }
+
+  .location-form-container {
+    padding: 20px;
+  }
+
+  .location-form .form-row-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .location-actions {
+    flex-direction: column;
+  }
+
+  .btn-edit-small,
+  .btn-delete-small {
+    width: 100%;
+  }
+}
