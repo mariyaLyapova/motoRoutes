@@ -53,6 +53,8 @@
   border-radius: 4px;
   font-size: 14px;
   transition: border-color 0.3s;
+  background-color: white;
+  color: #333;
 }
 
 .form-group input:focus {

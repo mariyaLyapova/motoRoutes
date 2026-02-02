@@ -3,6 +3,8 @@ import { imageService } from '../../services/imageService';
 import ImageUpload from './ImageUpload';
 import { useAuth } from '../../hooks/useAuth';
 
+const API_BASE_URL = 'http://localhost:8000';
+
 export default function ImageGallery({ images, routeId, locationId, isCreator, onUpdate }) {
   const { user } = useAuth();
   const [showUpload, setShowUpload] = useState(false);
@@ -63,8 +65,12 @@ export default function ImageGallery({ images, routeId, locationId, isCreator, o
                 onClick={() => setSelectedImage(image)}
               >
                 <img
-                  src={`http://localhost:8000${image.image}`}
+                  src={image.image.startsWith('http') ? image.image : `${API_BASE_URL}${image.image}`}
                   alt={image.caption || 'Route photo'}
+                  onError={(e) => {
+                    console.error('Image load error:', image.image);
+                    e.target.style.display = 'none';
+                  }}
                 />
               </div>
 
@@ -109,7 +115,7 @@ export default function ImageGallery({ images, routeId, locationId, isCreator, o
               ×
             </button>
             <img
-              src={`http://localhost:8000${selectedImage.image}`}
+              src={selectedImage.image.startsWith('http') ? selectedImage.image : `${API_BASE_URL}${selectedImage.image}`}
               alt={selectedImage.caption || 'Route photo'}
             />
             {selectedImage.caption && (

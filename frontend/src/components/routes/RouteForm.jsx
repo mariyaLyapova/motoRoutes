@@ -11,6 +11,8 @@ export default function RouteForm({ initialData, onSubmit, submitLabel }) {
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,6 +27,58 @@ export default function RouteForm({ initialData, onSubmit, submitLabel }) {
         [name]: '',
       }));
     }
+  };
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    
+    // Validate each file
+    const validFiles = [];
+    const newPreviews = [];
+    
+    files.forEach((file) => {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        return;
+      }
+      
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        return;
+      }
+      
+      validFiles.push(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        newPreviews.push({
+          file,
+          preview: reader.result,
+          caption: ''
+        });
+        
+        if (newPreviews.length === validFiles.length) {
+          setImagePreviews((prev) => [...prev, ...newPreviews]);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+    
+    setSelectedImages((prev) => [...prev, ...validFiles]);
+  };
+
+  const removeImage = (index) => {
+    setSelectedImages((prev) => prev.filter((_, i) => i !== index));
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const updateImageCaption = (index, caption) => {
+    setImagePreviews((prev) => 
+      prev.map((item, i) => 
+        i === index ? { ...item, caption } : item
+      )
+    );
   };
 
   const validateForm = () => {
@@ -81,6 +135,8 @@ export default function RouteForm({ initialData, onSubmit, submitLabel }) {
         difficulty: formData.difficulty,
         distance: parseFloat(formData.distance),
         geojson: JSON.parse(formData.geojson),
+        images: selectedImages,
+        imageCaptions: imagePreviews.map(img => img.caption),
       };
 
       await onSubmit(submitData);
@@ -209,6 +265,57 @@ export default function RouteForm({ initialData, onSubmit, submitLabel }) {
             Enter a GeoJSON LineString with coordinates in [longitude, latitude] format.
             Map drawing will be added in a future update.
           </div>
+        </div>
+      </div>
+
+      <div className="form-row">
+        <div className="form-group">
+          <label>
+            Route Photos (Optional)
+          </label>
+          <input
+            type="file"
+            id="images"
+            accept="image/*"
+            multiple
+            onChange={handleImageChange}
+            className="file-input-hidden"
+            style={{ display: 'none' }}
+          />
+          <button
+            type="button"
+            onClick={() => document.getElementById('images').click()}
+            className="btn-upload-photo"
+          >
+            📷 Upload Photos
+          </button>
+          <div className="help-text">
+            Upload photos of your route (max 5MB per image)
+          </div>
+          
+          {imagePreviews.length > 0 && (
+            <div className="image-previews">
+              {imagePreviews.map((img, index) => (
+                <div key={index} className="image-preview-item">
+                  <img src={img.preview} alt={`Preview ${index + 1}`} />
+                  <input
+                    type="text"
+                    placeholder="Add caption (optional)"
+                    value={img.caption}
+                    onChange={(e) => updateImageCaption(index, e.target.value)}
+                    className="caption-input"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeImage(index)}
+                    className="remove-image-btn"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

@@ -65,6 +65,8 @@
   font-size: 14px;
   font-family: inherit;
   transition: border-color 0.3s;
+  background-color: white;
+  color: #333;
 }
 
 .form-group input:focus,
@@ -148,6 +150,91 @@
 .btn-submit:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+/* Image Upload Styles */
+
+.btn-upload-photo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #ff6b35;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
+}
+
+.btn-upload-photo:hover {
+  background: #e55a28;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
+}
+
+.btn-upload-photo:active {
+  transform: translateY(0);
+}
+
+.image-previews {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.image-preview-item {
+  position: relative;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  background: white;
+}
+
+.image-preview-item img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.caption-input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 13px;
+  margin-bottom: 5px;
+  background-color: white;
+  color: #333;
+}
+
+.remove-image-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 0, 0, 0.8);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.remove-image-btn:hover {
+  background: rgba(255, 0, 0, 1);
 }
 
 /* Responsive Design */
