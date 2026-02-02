@@ -41,27 +41,26 @@ const ProfileInfo = ({ user, stats }) => {
 
         {user.bio && (
           <div className="profile-field">
-            <label>Bio</label>
+            <label>About Me</label>
             <p>{user.bio}</p>
           </div>
         )}
 
-        {/* Motorcycle Info - only show if at least one field has value */}
-        {(user.motorcycle_brand || user.motorcycle_model || user.motorcycle_year) && (
-          <div className="profile-field">
-            <label>Motorcycle</label>
-            <span>
-              {user.motorcycle_brand && user.motorcycle_brand}
-              {user.motorcycle_brand && user.motorcycle_model && ' '}
-              {user.motorcycle_model && user.motorcycle_model}
-              {user.motorcycle_year && ` (${user.motorcycle_year})`}
-            </span>
-          </div>
-        )}
-
+        {/* Motorcycle Info - always show */}
         <div className="profile-field">
-          <label>Member since</label>
-          <span>{formatDate(user.created_at)}</span>
+          <label>Motorcycle</label>
+          <span>
+            {(user.motorcycle_brand || user.motorcycle_model || user.motorcycle_year) ? (
+              <>
+                {user.motorcycle_brand && user.motorcycle_brand}
+                {user.motorcycle_brand && user.motorcycle_model && ' '}
+                {user.motorcycle_model && user.motorcycle_model}
+                {user.motorcycle_year && ` (${user.motorcycle_year})`}
+              </>
+            ) : (
+              <span className="empty-value">Not added yet</span>
+            )}
+          </span>
         </div>
       </div>
 

@@ -126,9 +126,9 @@ const ProfileEdit = ({ user, onSave, onCancel }) => {
           </div>
         </div>
 
-        {/* Bio */}
+        {/* About Me */}
         <div className="form-group">
-          <label htmlFor="bio">Bio</label>
+          <label htmlFor="bio">About Me</label>
           <textarea
             id="bio"
             name="bio"

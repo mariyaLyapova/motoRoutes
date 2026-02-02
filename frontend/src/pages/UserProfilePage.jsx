@@ -23,14 +23,14 @@ const UserProfilePage = () => {
       setError('');
 
       // Fetch user and routes in parallel
-      const [userData, routesData] = await Promise.all([
+      const [userResponse, routesResponse] = await Promise.all([
         userService.getUser(id),
         routeService.getUserRoutes(id)
       ]);
 
-      setUser(userData);
-      setRoutes(routesData);
-      calculateStats(routesData);
+      setUser(userResponse.data);
+      setRoutes(routesResponse.data);
+      calculateStats(routesResponse.data);
     } catch (error) {
       console.error('Error fetching user data:', error);
       if (error.response && error.response.status === 404) {

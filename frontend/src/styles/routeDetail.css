@@ -59,6 +59,18 @@
   font-size: 14px;
 }
 
+.meta-item .creator-link {
+  color: #4a90e2;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.meta-item .creator-link:hover {
+  color: #357abd;
+  text-decoration: underline;
+}
+
 .difficulty-badge {
   padding: 6px 14px;
   border-radius: 14px;

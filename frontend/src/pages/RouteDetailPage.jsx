@@ -124,7 +124,13 @@ export default function RouteDetailPage() {
                 📅 {formatDate(route.created_at)}
               </span>
               <span className="meta-item">
-                👤 By {route.creator?.username || 'Unknown'}
+                👤 By {route.creator ? (
+                  <Link to={`/users/${route.creator.id}`} className="creator-link">
+                    {route.creator.username}
+                  </Link>
+                ) : (
+                  'Unknown'
+                )}
               </span>
             </div>
           </div>
@@ -218,9 +224,6 @@ export default function RouteDetailPage() {
                     🏍️ {route.creator.motorcycle_brand} {route.creator.motorcycle_model}
                   </div>
                 )}
-                <div className="creator-date">
-                  Joined {formatDate(route.creator?.created_at || route.created_at)}
-                </div>
               </div>
             </div>
           </div>
