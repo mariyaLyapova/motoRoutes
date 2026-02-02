@@ -13,6 +13,8 @@ export default function RouteForm({ initialData, onSubmit, submitLabel }) {
   const [loading, setLoading] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [existingImages, setExistingImages] = useState(initialData?.images || []);
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,26 +31,26 @@ export default function RouteForm({ initialData, onSubmit, submitLabel }) {
     }
   };
 
-  const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    
+  const processFiles = (files) => {
+    const fileArray = Array.from(files);
+
     // Validate each file
     const validFiles = [];
     const newPreviews = [];
-    
-    files.forEach((file) => {
+
+    fileArray.forEach((file) => {
       // Validate file type
       if (!file.type.startsWith('image/')) {
         return;
       }
-      
+
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         return;
       }
-      
+
       validFiles.push(file);
-      
+
       // Create preview
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -57,20 +59,51 @@ export default function RouteForm({ initialData, onSubmit, submitLabel }) {
           preview: reader.result,
           caption: ''
         });
-        
+
         if (newPreviews.length === validFiles.length) {
           setImagePreviews((prev) => [...prev, ...newPreviews]);
         }
       };
       reader.readAsDataURL(file);
     });
-    
+
     setSelectedImages((prev) => [...prev, ...validFiles]);
+  };
+
+  const handleImageChange = (e) => {
+    processFiles(e.target.files);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      processFiles(files);
+    }
   };
 
   const removeImage = (index) => {
     setSelectedImages((prev) => prev.filter((_, i) => i !== index));
     setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const removeExistingImage = (imageId) => {
+    setExistingImages((prev) => prev.filter((img) => img.id !== imageId));
   };
 
   const updateImageCaption = (index, caption) => {
@@ -137,6 +170,7 @@ export default function RouteForm({ initialData, onSubmit, submitLabel }) {
         geojson: JSON.parse(formData.geojson),
         images: selectedImages,
         imageCaptions: imagePreviews.map(img => img.caption),
+        existingImages: existingImages.map(img => img.id), // IDs of existing images to keep
       };
 
       await onSubmit(submitData);
@@ -282,38 +316,75 @@ export default function RouteForm({ initialData, onSubmit, submitLabel }) {
             className="file-input-hidden"
             style={{ display: 'none' }}
           />
-          <button
-            type="button"
+          <div
+            className={`drag-drop-zone ${isDragging ? 'dragging' : ''}`}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
             onClick={() => document.getElementById('images').click()}
-            className="btn-upload-photo"
           >
-            📷 Upload Photos
-          </button>
-          <div className="help-text">
-            Upload photos of your route (max 5MB per image)
+            <div className="drag-drop-icon">📷</div>
+            <div className="drag-drop-text">
+              <strong>Drag & drop photos here</strong>
+              <span>or click to browse</span>
+            </div>
+            <div className="drag-drop-hint">Max 5MB per image</div>
           </div>
-          
+
+          {/* Existing Photos (from server) */}
+          {existingImages.length > 0 && (
+            <div className="existing-images-section">
+              <h4 style={{ marginTop: '20px', marginBottom: '10px', fontSize: '14px', color: '#666' }}>
+                Current Photos ({existingImages.length})
+              </h4>
+              <div className="image-previews">
+                {existingImages.map((img) => (
+                  <div key={img.id} className="image-preview-item">
+                    <img src={img.image} alt={img.caption || 'Route photo'} />
+                    {img.caption && (
+                      <div className="existing-caption">{img.caption}</div>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => removeExistingImage(img.id)}
+                      className="remove-image-btn"
+                      title="Remove this photo"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* New Photos (to be uploaded) */}
           {imagePreviews.length > 0 && (
-            <div className="image-previews">
-              {imagePreviews.map((img, index) => (
-                <div key={index} className="image-preview-item">
-                  <img src={img.preview} alt={`Preview ${index + 1}`} />
-                  <input
-                    type="text"
-                    placeholder="Add caption (optional)"
-                    value={img.caption}
-                    onChange={(e) => updateImageCaption(index, e.target.value)}
-                    className="caption-input"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeImage(index)}
-                    className="remove-image-btn"
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))}
+            <div className="new-images-section">
+              <h4 style={{ marginTop: '20px', marginBottom: '10px', fontSize: '14px', color: '#666' }}>
+                New Photos to Upload ({imagePreviews.length})
+              </h4>
+              <div className="image-previews">
+                {imagePreviews.map((img, index) => (
+                  <div key={index} className="image-preview-item">
+                    <img src={img.preview} alt={`Preview ${index + 1}`} />
+                    <input
+                      type="text"
+                      placeholder="Add caption (optional)"
+                      value={img.caption}
+                      onChange={(e) => updateImageCaption(index, e.target.value)}
+                      className="caption-input"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="remove-image-btn"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

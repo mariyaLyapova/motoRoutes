@@ -14,6 +14,12 @@ export const userService = {
     api.get('/users/profile/'),
 
   // Update current user's profile (requires auth)
-  updateProfile: (userData) =>
-    api.patch('/users/profile/', userData),
+  updateProfile: (userData) => {
+    // If userData is FormData (for file uploads), set proper headers
+    const config = userData instanceof FormData 
+      ? { headers: { 'Content-Type': 'multipart/form-data' } }
+      : {};
+    
+    return api.patch('/users/profile/', userData, config);
+  },
 };

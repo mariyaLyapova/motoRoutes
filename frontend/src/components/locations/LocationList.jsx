@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { locationService } from '../../services/locationService';
 import LocationForm from './LocationForm';
-import { useAuth } from '../../hooks/useAuth';
 
 export default function LocationList({ locations, routeId, isCreator, onUpdate }) {
-  const { user } = useAuth();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
 

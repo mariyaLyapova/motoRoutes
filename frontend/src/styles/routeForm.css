@@ -154,30 +154,55 @@
 
 /* Image Upload Styles */
 
-.btn-upload-photo {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  background: #ff6b35;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 600;
+/* Drag & Drop Zone */
+.drag-drop-zone {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 40px 20px;
+  text-align: center;
+  background: #fafafa;
   cursor: pointer;
   transition: all 0.3s ease;
+  margin-bottom: 15px;
+}
+
+.drag-drop-zone:hover {
+  border-color: #4a90e2;
+  background: #f0f7ff;
+}
+
+.drag-drop-zone.dragging {
+  border-color: #4a90e2;
+  background: #e3f2fd;
+  transform: scale(1.02);
+}
+
+.drag-drop-icon {
+  font-size: 48px;
   margin-bottom: 10px;
+  opacity: 0.7;
 }
 
-.btn-upload-photo:hover {
-  background: #e55a28;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
+.drag-drop-text {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 8px;
 }
 
-.btn-upload-photo:active {
-  transform: translateY(0);
+.drag-drop-text strong {
+  font-size: 15px;
+  color: #333;
+}
+
+.drag-drop-text span {
+  font-size: 13px;
+  color: #666;
+}
+
+.drag-drop-hint {
+  font-size: 12px;
+  color: #999;
 }
 
 .image-previews {
@@ -235,6 +260,28 @@
 
 .remove-image-btn:hover {
   background: rgba(255, 0, 0, 1);
+}
+
+.existing-caption {
+  font-size: 13px;
+  color: #666;
+  padding: 6px 8px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  font-style: italic;
+}
+
+.existing-images-section,
+.new-images-section {
+  margin-top: 15px;
+}
+
+.existing-images-section h4,
+.new-images-section h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* Responsive Design */
