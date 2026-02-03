@@ -10,6 +10,22 @@ const ProfileInfo = ({ user, stats }) => {
     });
   };
 
+  const getMotorcycleTypeLabel = (type) => {
+    const types = {
+      'sport': 'Sport',
+      'cruiser': 'Cruiser',
+      'touring': 'Touring',
+      'adventure': 'Adventure',
+      'naked': 'Naked/Standard',
+      'dual_sport': 'Dual Sport',
+      'scooter': 'Scooter',
+      'cafe_racer': 'Cafe Racer',
+      'scrambler': 'Scrambler',
+      'other': 'Other'
+    };
+    return types[type] || type;
+  };
+
   return (
     <div className="profile-info-card">
       {/* Avatar Section */}
@@ -50,8 +66,9 @@ const ProfileInfo = ({ user, stats }) => {
         <div className="profile-field">
           <label>Motorcycle</label>
           <span>
-            {(user.motorcycle_brand || user.motorcycle_model || user.motorcycle_year) ? (
+            {(user.motorcycle_type || user.motorcycle_brand || user.motorcycle_model || user.motorcycle_year) ? (
               <>
+                {user.motorcycle_type && `${getMotorcycleTypeLabel(user.motorcycle_type)} - `}
                 {user.motorcycle_brand && user.motorcycle_brand}
                 {user.motorcycle_brand && user.motorcycle_model && ' '}
                 {user.motorcycle_model && user.motorcycle_model}

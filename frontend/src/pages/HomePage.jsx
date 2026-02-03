@@ -1,8 +1,30 @@
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
+import { routeService } from '../services/routeService';
+import RouteCard from '../components/routes/RouteCard';
 
 export default function HomePage() {
   const { user } = useAuth();
+  const [recentRoutes, setRecentRoutes] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadRecentRoutes();
+  }, []);
+
+  const loadRecentRoutes = async () => {
+    try {
+      setLoading(true);
+      const response = await routeService.getRoutes(1, {});
+      // Get the first 6 routes for the home page
+      setRecentRoutes(response.data.results.slice(0, 6));
+    } catch (error) {
+      console.error('Failed to load recent routes:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="home-page">
@@ -49,6 +71,30 @@ export default function HomePage() {
           <h3>Community</h3>
           <p>Connect with fellow riders, share tips, and discover the best routes in your area</p>
         </div>
+      </div>
+
+      <div className="home-recent-routes">
+        <div className="section-header">
+          <h2>Recent Routes</h2>
+          <Link to="/routes" className="view-all-link">View All →</Link>
+        </div>
+
+        {loading ? (
+          <div className="loading-message">Loading routes...</div>
+        ) : recentRoutes.length > 0 ? (
+          <div className="routes-grid">
+            {recentRoutes.map(route => (
+              <RouteCard key={route.id} route={route} />
+            ))}
+          </div>
+        ) : (
+          <div className="no-routes-message">
+            <p>No routes yet. Be the first to create one!</p>
+            {user && (
+              <Link to="/routes/create" className="btn-primary">Create Route</Link>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

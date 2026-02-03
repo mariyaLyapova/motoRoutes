@@ -1,8 +1,23 @@
 import React, { useState } from 'react';
 
 const ProfileEdit = ({ user, onSave, onCancel }) => {
+  const motorcycleTypes = [
+    { value: '', label: 'Select Type' },
+    { value: 'sport', label: 'Sport' },
+    { value: 'cruiser', label: 'Cruiser' },
+    { value: 'touring', label: 'Touring' },
+    { value: 'adventure', label: 'Adventure' },
+    { value: 'naked', label: 'Naked/Standard' },
+    { value: 'dual_sport', label: 'Dual Sport' },
+    { value: 'scooter', label: 'Scooter' },
+    { value: 'cafe_racer', label: 'Cafe Racer' },
+    { value: 'scrambler', label: 'Scrambler' },
+    { value: 'other', label: 'Other' }
+  ];
+
   const [formData, setFormData] = useState({
     bio: user.bio || '',
+    motorcycle_type: user.motorcycle_type || '',
     motorcycle_brand: user.motorcycle_brand || '',
     motorcycle_model: user.motorcycle_model || '',
     motorcycle_year: user.motorcycle_year || ''
@@ -61,6 +76,7 @@ const ProfileEdit = ({ user, onSave, onCancel }) => {
         data = new FormData();
         data.append('avatar', avatarFile);
         data.append('bio', formData.bio);
+        data.append('motorcycle_type', formData.motorcycle_type);
         data.append('motorcycle_brand', formData.motorcycle_brand);
         data.append('motorcycle_model', formData.motorcycle_model);
         if (formData.motorcycle_year) {
@@ -70,6 +86,7 @@ const ProfileEdit = ({ user, onSave, onCancel }) => {
         // Regular JSON update
         data = {
           bio: formData.bio,
+          motorcycle_type: formData.motorcycle_type,
           motorcycle_brand: formData.motorcycle_brand,
           motorcycle_model: formData.motorcycle_model,
           motorcycle_year: formData.motorcycle_year || null
@@ -139,6 +156,23 @@ const ProfileEdit = ({ user, onSave, onCancel }) => {
             placeholder="Tell us about yourself..."
           />
           <small className="char-count">{formData.bio.length}/500 characters</small>
+        </div>
+
+        {/* Motorcycle Type */}
+        <div className="form-group">
+          <label htmlFor="motorcycle_type">Motorcycle Type</label>
+          <select
+            id="motorcycle_type"
+            name="motorcycle_type"
+            value={formData.motorcycle_type}
+            onChange={handleChange}
+          >
+            {motorcycleTypes.map(type => (
+              <option key={type.value} value={type.value}>
+                {type.label}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Motorcycle Brand */}

@@ -1,5 +1,6 @@
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, status, filters
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import Route, Location, Image, Comment
 from .serializers import (
     RouteSerializer,
@@ -18,9 +19,18 @@ class RouteListCreateView(generics.ListCreateAPIView):
     API endpoint to list and create routes.
     GET /api/routes/ - List all routes
     POST /api/routes/ - Create new route
+
+    Filters:
+    - search: Search by title or description
+    - difficulty: Filter by difficulty (easy, moderate, hard, expert)
     """
     queryset = Route.objects.all().select_related('creator').prefetch_related('locations', 'images', 'comments')
     permission_classes = [permissions.AllowAny]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['title', 'description']
+    filterset_fields = ['difficulty']
+    ordering_fields = ['created_at', 'distance', 'title']
+    ordering = ['-created_at']
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
