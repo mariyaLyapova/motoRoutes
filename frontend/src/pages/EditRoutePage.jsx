@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { routeService } from '../services/routeService';
+import { imageService } from '../services/imageService';
 import { useAuth } from '../hooks/useAuth';
 import RouteForm from '../components/routes/RouteForm';
 
@@ -36,9 +37,38 @@ export default function EditRoutePage() {
   };
 
   const handleSubmit = async (formData) => {
-    await routeService.updateRoute(id, formData);
-    // Navigate to the updated route detail page
-    navigate(`/routes/${id}`);
+    try {
+      // First, update the route basic information
+      await routeService.updateRoute(id, {
+        title: formData.title,
+        description: formData.description,
+        difficulty: formData.difficulty,
+        distance: formData.distance,
+        geojson: formData.geojson,
+      });
+      
+      // Then, upload new images if any
+      if (formData.images && formData.images.length > 0) {
+        const uploadPromises = formData.images.map((image) => {
+          const imageFormData = new FormData();
+          imageFormData.append('image', image);
+          imageFormData.append('route', id);
+          
+          return imageService.uploadImage(imageFormData);
+        });
+        
+        await Promise.all(uploadPromises);
+      }
+      
+      // Show success message
+      alert('Route updated successfully!');
+      
+      // Navigate to the updated route detail page
+      navigate(`/routes/${id}`);
+    } catch (error) {
+      // Re-throw the error so RouteForm can handle it
+      throw error;
+    }
   };
 
   if (loading) {

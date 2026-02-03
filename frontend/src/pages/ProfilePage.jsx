@@ -19,9 +19,9 @@ const ProfilePage = () => {
   const fetchUserRoutes = async () => {
     try {
       setLoading(true);
-      const data = await routeService.getUserRoutes(user.id);
-      setRoutes(data);
-      calculateStats(data);
+      const routesData = await routeService.getUserRoutes(user.id);
+      setRoutes(routesData);
+      calculateStats(routesData);
     } catch (error) {
       console.error('Error fetching routes:', error);
       setRoutes([]);

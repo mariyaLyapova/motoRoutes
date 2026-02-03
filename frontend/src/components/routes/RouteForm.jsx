@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function RouteForm({ initialData, onSubmit, submitLabel }) {
+export default function RouteForm({ initialData, onSubmit, submitLabel, showImageUpload = true }) {
   const [formData, setFormData] = useState({
     title: initialData?.title || '',
     description: initialData?.description || '',
@@ -56,8 +56,7 @@ export default function RouteForm({ initialData, onSubmit, submitLabel }) {
       reader.onloadend = () => {
         newPreviews.push({
           file,
-          preview: reader.result,
-          caption: ''
+          preview: reader.result
         });
 
         if (newPreviews.length === validFiles.length) {
@@ -104,14 +103,6 @@ export default function RouteForm({ initialData, onSubmit, submitLabel }) {
 
   const removeExistingImage = (imageId) => {
     setExistingImages((prev) => prev.filter((img) => img.id !== imageId));
-  };
-
-  const updateImageCaption = (index, caption) => {
-    setImagePreviews((prev) => 
-      prev.map((item, i) => 
-        i === index ? { ...item, caption } : item
-      )
-    );
   };
 
   const validateForm = () => {
@@ -169,11 +160,13 @@ export default function RouteForm({ initialData, onSubmit, submitLabel }) {
         distance: parseFloat(formData.distance),
         geojson: JSON.parse(formData.geojson),
         images: selectedImages,
-        imageCaptions: imagePreviews.map(img => img.caption),
         existingImages: existingImages.map(img => img.id), // IDs of existing images to keep
       };
 
       await onSubmit(submitData);
+      // If we reach here, submission was successful
+      // The parent component will handle navigation
+      setLoading(false);
     } catch (error) {
       console.error('Form submission error:', error);
       if (error.response?.data) {
@@ -302,93 +295,85 @@ export default function RouteForm({ initialData, onSubmit, submitLabel }) {
         </div>
       </div>
 
-      <div className="form-row">
-        <div className="form-group">
-          <label>
-            Route Photos (Optional)
-          </label>
-          <input
-            type="file"
-            id="images"
-            accept="image/*"
-            multiple
-            onChange={handleImageChange}
-            className="file-input-hidden"
-            style={{ display: 'none' }}
-          />
-          <div
-            className={`drag-drop-zone ${isDragging ? 'dragging' : ''}`}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            onClick={() => document.getElementById('images').click()}
-          >
-            <div className="drag-drop-icon">📷</div>
-            <div className="drag-drop-text">
-              <strong>Drag & drop photos here</strong>
-              <span>or click to browse</span>
+      {showImageUpload && (
+        <div className="form-row">
+          <div className="form-group">
+            <label>
+              Route Photos (Optional)
+            </label>
+            <input
+              type="file"
+              id="images"
+              accept="image/*"
+              multiple
+              onChange={handleImageChange}
+              className="file-input-hidden"
+              style={{ display: 'none' }}
+            />
+            <div
+              className={`drag-drop-zone ${isDragging ? 'dragging' : ''}`}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              onClick={() => document.getElementById('images').click()}
+            >
+              <div className="drag-drop-icon">📷</div>
+              <div className="drag-drop-text">
+                <strong>Drag & drop photos here</strong>
+                <span>or click to browse</span>
+              </div>
+              <div className="drag-drop-hint">Max 5MB per image</div>
             </div>
-            <div className="drag-drop-hint">Max 5MB per image</div>
+
+            {/* Existing Photos (from server) */}
+            {existingImages.length > 0 && (
+              <div className="existing-images-section">
+                <h4 style={{ marginTop: '20px', marginBottom: '10px', fontSize: '14px', color: '#666' }}>
+                  Current Photos ({existingImages.length})
+                </h4>
+                <div className="image-previews">
+                  {existingImages.map((img) => (
+                    <div key={img.id} className="image-preview-item">
+                      <img src={img.image} alt="Route photo" />
+                      <button
+                        type="button"
+                        onClick={() => removeExistingImage(img.id)}
+                        className="remove-image-btn"
+                        title="Remove this photo"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* New Photos (to be uploaded) */}
+            {imagePreviews.length > 0 && (
+              <div className="new-images-section">
+                <h4 style={{ marginTop: '20px', marginBottom: '10px', fontSize: '14px', color: '#666' }}>
+                  New Photos to Upload ({imagePreviews.length})
+                </h4>
+                <div className="image-previews">
+                  {imagePreviews.map((img, index) => (
+                    <div key={index} className="image-preview-item">
+                      <img src={img.preview} alt={`Preview ${index + 1}`} />
+                      <button
+                        type="button"
+                        onClick={() => removeImage(index)}
+                        className="remove-image-btn"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-
-          {/* Existing Photos (from server) */}
-          {existingImages.length > 0 && (
-            <div className="existing-images-section">
-              <h4 style={{ marginTop: '20px', marginBottom: '10px', fontSize: '14px', color: '#666' }}>
-                Current Photos ({existingImages.length})
-              </h4>
-              <div className="image-previews">
-                {existingImages.map((img) => (
-                  <div key={img.id} className="image-preview-item">
-                    <img src={img.image} alt={img.caption || 'Route photo'} />
-                    {img.caption && (
-                      <div className="existing-caption">{img.caption}</div>
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => removeExistingImage(img.id)}
-                      className="remove-image-btn"
-                      title="Remove this photo"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* New Photos (to be uploaded) */}
-          {imagePreviews.length > 0 && (
-            <div className="new-images-section">
-              <h4 style={{ marginTop: '20px', marginBottom: '10px', fontSize: '14px', color: '#666' }}>
-                New Photos to Upload ({imagePreviews.length})
-              </h4>
-              <div className="image-previews">
-                {imagePreviews.map((img, index) => (
-                  <div key={index} className="image-preview-item">
-                    <img src={img.preview} alt={`Preview ${index + 1}`} />
-                    <input
-                      type="text"
-                      placeholder="Add caption (optional)"
-                      value={img.caption}
-                      onChange={(e) => updateImageCaption(index, e.target.value)}
-                      className="caption-input"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeImage(index)}
-                      className="remove-image-btn"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
-      </div>
+      )}
 
       <div className="form-actions">
         <button type="submit" disabled={loading} className="btn-submit">

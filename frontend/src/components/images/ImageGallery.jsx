@@ -66,17 +66,13 @@ export default function ImageGallery({ images, routeId, locationId, isCreator, o
               >
                 <img
                   src={image.image.startsWith('http') ? image.image : `${API_BASE_URL}${image.image}`}
-                  alt={image.caption || 'Route photo'}
+                  alt="Route photo"
                   onError={(e) => {
                     console.error('Image load error:', image.image);
                     e.target.style.display = 'none';
                   }}
                 />
               </div>
-
-              {image.caption && (
-                <p className="image-caption">{image.caption}</p>
-              )}
 
               <div className="image-meta">
                 <span className="image-uploader">
@@ -116,11 +112,8 @@ export default function ImageGallery({ images, routeId, locationId, isCreator, o
             </button>
             <img
               src={selectedImage.image.startsWith('http') ? selectedImage.image : `${API_BASE_URL}${selectedImage.image}`}
-              alt={selectedImage.caption || 'Route photo'}
+              alt="Route photo"
             />
-            {selectedImage.caption && (
-              <p className="modal-caption">{selectedImage.caption}</p>
-            )}
           </div>
         </div>
       )}

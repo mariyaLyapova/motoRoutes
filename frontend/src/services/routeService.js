@@ -24,8 +24,11 @@ export const routeService = {
     api.delete(`/routes/${id}/`),
 
   // Get routes by specific user
-  getUserRoutes: (userId) =>
-    api.get(`/routes/user/${userId}/`),
+  getUserRoutes: async (userId) => {
+    const response = await api.get(`/routes/user/${userId}/`);
+    // Return just the results array from the paginated response
+    return response.data.results || [];
+  },
 
   // Get locations for a route
   getRouteLocations: (routeId) =>

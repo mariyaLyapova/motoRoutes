@@ -1,44 +1,31 @@
 import { useNavigate } from 'react-router-dom';
 import { routeService } from '../services/routeService';
-import { imageService } from '../services/imageService';
 import RouteForm from '../components/routes/RouteForm';
 
 export default function CreateRoutePage() {
   const navigate = useNavigate();
 
   const handleSubmit = async (formData) => {
-    // First, create the route
-    const response = await routeService.createRoute({
-      title: formData.title,
-      description: formData.description,
-      difficulty: formData.difficulty,
-      distance: formData.distance,
-      geojson: formData.geojson,
-    });
-    
-    const routeId = response.data.id;
-    
-    // Then, upload images if any
-    if (formData.images && formData.images.length > 0) {
-      const uploadPromises = formData.images.map((image, index) => {
-        const imageFormData = new FormData();
-        imageFormData.append('image', image);
-        imageFormData.append('route', routeId);
-        
-        // Add caption if provided
-        const caption = formData.imageCaptions[index];
-        if (caption) {
-          imageFormData.append('caption', caption);
-        }
-        
-        return imageService.uploadImage(imageFormData);
+    try {
+      // Create the route
+      await routeService.createRoute({
+        title: formData.title,
+        description: formData.description,
+        difficulty: formData.difficulty,
+        distance: formData.distance,
+        geojson: formData.geojson,
       });
-      
-      await Promise.all(uploadPromises);
+
+      // Show success message
+      alert('Route created successfully!');
+
+      // Navigate to the routes list page
+      navigate('/routes');
+    } catch (error) {
+      console.error('Error creating route:', error);
+      // Re-throw the error so RouteForm can handle it
+      throw error;
     }
-    
-    // Navigate to the newly created route detail page
-    navigate(`/routes/${routeId}`);
   };
 
   return (
@@ -50,7 +37,7 @@ export default function CreateRoutePage() {
         </div>
 
         <div className="form-container">
-          <RouteForm onSubmit={handleSubmit} submitLabel="Create Route" />
+          <RouteForm onSubmit={handleSubmit} submitLabel="Create Route" showImageUpload={false} />
         </div>
       </div>
     </div>

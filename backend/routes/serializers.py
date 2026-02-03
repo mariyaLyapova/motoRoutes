@@ -24,6 +24,28 @@ class ImageSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id', 'created_at', 'uploader']
 
+    def to_internal_value(self, data):
+        """Override to handle string-to-integer conversion for ForeignKey fields from FormData."""
+        # Make a mutable copy of the data
+        if hasattr(data, '_mutable'):
+            data._mutable = True
+
+        # Convert route from string to int if present
+        if 'route' in data and data['route']:
+            try:
+                data['route'] = int(data['route'])
+            except (ValueError, TypeError):
+                pass  # Let the parent validation handle the error
+
+        # Convert location from string to int if present
+        if 'location' in data and data['location']:
+            try:
+                data['location'] = int(data['location'])
+            except (ValueError, TypeError):
+                pass  # Let the parent validation handle the error
+
+        return super().to_internal_value(data)
+
 
 class CommentSerializer(serializers.ModelSerializer):
     """
