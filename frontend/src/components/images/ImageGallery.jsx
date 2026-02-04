@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { imageService } from '../../services/imageService';
 import ImageUpload from './ImageUpload';
 import { useAuth } from '../../hooks/useAuth';
@@ -17,14 +18,16 @@ export default function ImageGallery({ images, routeId, locationId, isCreator, o
 
     try {
       await imageService.deleteImage(imageId);
+      toast.success('Image deleted successfully!');
       onUpdate();
     } catch (error) {
       console.error('Error deleting image:', error);
-      alert('Failed to delete image. Please try again.');
+      toast.error('Failed to delete image. Please try again.');
     }
   };
 
   const handleUploadSuccess = () => {
+    toast.success('Image uploaded successfully!');
     setShowUpload(false);
     onUpdate();
   };

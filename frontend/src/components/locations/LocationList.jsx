@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { locationService } from '../../services/locationService';
 import LocationForm from './LocationForm';
 
@@ -21,15 +22,27 @@ export default function LocationList({ locations, routeId, isCreator, onUpdate }
   };
 
   const handleAddLocation = async (locationData) => {
-    await locationService.createLocation(locationData);
-    setShowAddForm(false);
-    onUpdate();
+    try {
+      await locationService.createLocation(locationData);
+      toast.success('Location added successfully!');
+      setShowAddForm(false);
+      onUpdate();
+    } catch (error) {
+      console.error('Error adding location:', error);
+      toast.error('Failed to add location. Please try again.');
+    }
   };
 
   const handleEditLocation = async (locationData) => {
-    await locationService.updateLocation(editingId, locationData);
-    setEditingId(null);
-    onUpdate();
+    try {
+      await locationService.updateLocation(editingId, locationData);
+      toast.success('Location updated successfully!');
+      setEditingId(null);
+      onUpdate();
+    } catch (error) {
+      console.error('Error updating location:', error);
+      toast.error('Failed to update location. Please try again.');
+    }
   };
 
   const handleDeleteLocation = async (id) => {
@@ -39,10 +52,11 @@ export default function LocationList({ locations, routeId, isCreator, onUpdate }
 
     try {
       await locationService.deleteLocation(id);
+      toast.success('Location deleted successfully!');
       onUpdate();
     } catch (error) {
       console.error('Error deleting location:', error);
-      alert('Failed to delete location. Please try again.');
+      toast.error('Failed to delete location. Please try again.');
     }
   };
 

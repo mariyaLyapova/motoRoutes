@@ -62,6 +62,13 @@ const ProfileInfo = ({ user, stats }) => {
           </div>
         )}
 
+        {user.country && (
+          <div className="profile-field">
+            <label>Country</label>
+            <span>{user.country}</span>
+          </div>
+        )}
+
         {/* Motorcycle Info - always show */}
         <div className="profile-field">
           <label>Motorcycle</label>

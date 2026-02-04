@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function RouteForm({ initialData, onSubmit, submitLabel, showImageUpload = true }) {
   const [formData, setFormData] = useState({
@@ -147,6 +148,7 @@ export default function RouteForm({ initialData, onSubmit, submitLabel, showImag
     e.preventDefault();
 
     if (!validateForm()) {
+      toast.error('Please fix the form errors before submitting');
       return;
     }
 
@@ -164,6 +166,7 @@ export default function RouteForm({ initialData, onSubmit, submitLabel, showImag
       };
 
       await onSubmit(submitData);
+      toast.success('Route saved successfully!');
       // If we reach here, submission was successful
       // The parent component will handle navigation
       setLoading(false);
@@ -171,6 +174,9 @@ export default function RouteForm({ initialData, onSubmit, submitLabel, showImag
       console.error('Form submission error:', error);
       if (error.response?.data) {
         setErrors(error.response.data);
+        toast.error('Failed to save route. Please check the form for errors.');
+      } else {
+        toast.error('Failed to save route. Please try again.');
       }
       setLoading(false);
     }

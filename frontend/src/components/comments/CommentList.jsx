@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { commentService } from '../../services/commentService';
 import CommentForm from './CommentForm';
 import { useAuth } from '../../hooks/useAuth';
@@ -20,18 +21,30 @@ export default function CommentList({ comments, routeId, onUpdate }) {
   };
 
   const handleAddComment = async (commentData) => {
-    await commentService.createComment({
-      ...commentData,
-      route: routeId,
-    });
-    setShowAddForm(false);
-    onUpdate();
+    try {
+      await commentService.createComment({
+        ...commentData,
+        route: routeId,
+      });
+      toast.success('Comment added successfully!');
+      setShowAddForm(false);
+      onUpdate();
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      toast.error('Failed to add comment. Please try again.');
+    }
   };
 
   const handleEditComment = async (commentData) => {
-    await commentService.updateComment(editingId, commentData);
-    setEditingId(null);
-    onUpdate();
+    try {
+      await commentService.updateComment(editingId, commentData);
+      toast.success('Comment updated successfully!');
+      setEditingId(null);
+      onUpdate();
+    } catch (error) {
+      console.error('Error updating comment:', error);
+      toast.error('Failed to update comment. Please try again.');
+    }
   };
 
   const handleDeleteComment = async (id) => {
@@ -41,10 +54,11 @@ export default function CommentList({ comments, routeId, onUpdate }) {
 
     try {
       await commentService.deleteComment(id);
+      toast.success('Comment deleted successfully!');
       onUpdate();
     } catch (error) {
       console.error('Error deleting comment:', error);
-      alert('Failed to delete comment. Please try again.');
+      toast.error('Failed to delete comment. Please try again.');
     }
   };
 

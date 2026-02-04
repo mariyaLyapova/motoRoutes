@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { routeService } from '../services/routeService';
 import { useAuth } from '../hooks/useAuth';
 import LocationList from '../components/locations/LocationList';
@@ -28,7 +29,9 @@ export default function RouteDetailPage() {
       setRoute(response.data);
     } catch (err) {
       console.error('Error fetching route:', err);
-      setError('Failed to load route details. Please try again later.');
+      const errorMessage = 'Failed to load route details. Please try again later.';
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -42,10 +45,11 @@ export default function RouteDetailPage() {
     try {
       setDeleteLoading(true);
       await routeService.deleteRoute(id);
+      toast.success('Route deleted successfully!');
       navigate('/routes');
     } catch (err) {
       console.error('Error deleting route:', err);
-      alert('Failed to delete route. Please try again.');
+      toast.error('Failed to delete route. Please try again.');
       setDeleteLoading(false);
     }
   };

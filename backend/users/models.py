@@ -24,6 +24,7 @@ class User(AbstractUser):
     # Profile information
     bio = models.TextField(max_length=500, blank=True)
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+    country = models.CharField(max_length=100, blank=True)
 
     # Motorcycle information
     motorcycle_type = models.CharField(max_length=50, choices=MOTORCYCLE_TYPE_CHOICES, blank=True)
