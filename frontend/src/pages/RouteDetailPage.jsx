@@ -196,6 +196,12 @@ export default function RouteDetailPage() {
                 <span className="stat-label">Distance</span>
                 <span className="stat-value">{route.distance} km</span>
               </div>
+              {route.duration_days && (
+                <div className="stat-row">
+                  <span className="stat-label">Duration</span>
+                  <span className="stat-value">{route.duration_days} {route.duration_days === 1 ? 'day' : 'days'}</span>
+                </div>
+              )}
               <div className="stat-row">
                 <span className="stat-label">Difficulty</span>
                 <span

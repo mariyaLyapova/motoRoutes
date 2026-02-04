@@ -7,6 +7,7 @@ export default function RouteForm({ initialData, onSubmit, submitLabel, showImag
     description: initialData?.description || '',
     difficulty: initialData?.difficulty || 'moderate',
     distance: initialData?.distance || '',
+    duration_days: initialData?.duration_days || '',
     geojson: initialData?.geojson ? JSON.stringify(initialData.geojson, null, 2) : '',
   });
 
@@ -160,6 +161,7 @@ export default function RouteForm({ initialData, onSubmit, submitLabel, showImag
         description: formData.description.trim(),
         difficulty: formData.difficulty,
         distance: parseFloat(formData.distance),
+        duration_days: formData.duration_days ? parseInt(formData.duration_days) : null,
         geojson: JSON.parse(formData.geojson),
         images: selectedImages,
         existingImages: existingImages.map(img => img.id), // IDs of existing images to keep
@@ -235,7 +237,7 @@ export default function RouteForm({ initialData, onSubmit, submitLabel, showImag
         </div>
       </div>
 
-      <div className="form-row form-row-2">
+      <div className="form-row form-row-3">
         <div className="form-group">
           <label htmlFor="difficulty">
             Difficulty <span className="required">*</span>
@@ -269,6 +271,23 @@ export default function RouteForm({ initialData, onSubmit, submitLabel, showImag
             className={errors.distance ? 'error' : ''}
           />
           {errors.distance && <span className="error-text">{errors.distance}</span>}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="duration_days">
+            Trip Duration (days)
+          </label>
+          <input
+            type="number"
+            id="duration_days"
+            name="duration_days"
+            value={formData.duration_days}
+            onChange={handleChange}
+            placeholder="e.g., 3"
+            min="1"
+            className={errors.duration_days ? 'error' : ''}
+          />
+          {errors.duration_days && <span className="error-text">{errors.duration_days}</span>}
         </div>
       </div>
 

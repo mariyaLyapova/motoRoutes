@@ -35,6 +35,12 @@
   gap: 20px;
 }
 
+.form-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -296,7 +302,8 @@
     padding: 25px;
   }
 
-  .form-row-2 {
+  .form-row-2,
+  .form-row-3 {
     grid-template-columns: 1fr;
   }
 

@@ -44,6 +44,7 @@ export default function EditRoutePage() {
         description: formData.description,
         difficulty: formData.difficulty,
         distance: formData.distance,
+        duration_days: formData.duration_days,
         geojson: formData.geojson,
       });
       

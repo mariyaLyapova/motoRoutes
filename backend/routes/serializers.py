@@ -119,6 +119,7 @@ class RouteSerializer(serializers.ModelSerializer):
             'difficulty',
             'geojson',
             'distance',
+            'duration_days',
             'creator',
             'creator_id',
             'locations',
@@ -160,6 +161,7 @@ class RouteListSerializer(serializers.ModelSerializer):
             'description',
             'difficulty',
             'distance',
+            'duration_days',
             'creator',
             'locations_count',
             'images_count',
@@ -191,6 +193,7 @@ class RouteCreateSerializer(serializers.ModelSerializer):
             'difficulty',
             'geojson',
             'distance',
+            'duration_days',
         ]
 
     def validate_geojson(self, value):

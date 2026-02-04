@@ -21,6 +21,11 @@ class Route(models.Model):
     # Route data
     geojson = models.JSONField(help_text="GeoJSON LineString data for the route path")
     distance = models.FloatField(help_text="Distance in kilometers")
+    duration_days = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        help_text="Trip duration in days"
+    )
 
     # Relationships
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='routes')

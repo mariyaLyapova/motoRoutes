@@ -46,6 +46,13 @@ export default function RouteCard({ route }) {
           <span className="stat-value">{route.distance} km</span>
         </div>
 
+        {route.duration_days && (
+          <div className="stat">
+            <span className="stat-icon">📅</span>
+            <span className="stat-value">{route.duration_days} {route.duration_days === 1 ? 'day' : 'days'}</span>
+          </div>
+        )}
+
         <div className="stat">
           <span className="stat-icon">📍</span>
           <span className="stat-value">{route.locations_count || 0} POIs</span>
