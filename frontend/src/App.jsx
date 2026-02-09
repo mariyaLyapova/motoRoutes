@@ -12,6 +12,9 @@ import './styles/images.css';
 import './styles/comments.css';
 import './styles/profile.css';
 
+// Context
+import { GoogleMapsProvider } from './context/GoogleMapsProvider';
+
 // Layout
 import Layout from './components/layout/Layout';
 
@@ -32,31 +35,32 @@ import UserProfilePage from './pages/UserProfilePage';
 function App() {
   return (
     <BrowserRouter>
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          duration: 4000,
-          style: {
-            background: '#363636',
-            color: '#fff',
-          },
-          success: {
-            duration: 3000,
-            iconTheme: {
-              primary: '#10b981',
-              secondary: '#fff',
-            },
-          },
-          error: {
+      <GoogleMapsProvider>
+        <Toaster
+          position="top-right"
+          toastOptions={{
             duration: 4000,
-            iconTheme: {
-              primary: '#ef4444',
-              secondary: '#fff',
+            style: {
+              background: '#363636',
+              color: '#fff',
             },
-          },
-        }}
-      />
-      <Routes>
+            success: {
+              duration: 3000,
+              iconTheme: {
+                primary: '#10b981',
+                secondary: '#fff',
+              },
+            },
+            error: {
+              duration: 4000,
+              iconTheme: {
+                primary: '#ef4444',
+                secondary: '#fff',
+              },
+            },
+          }}
+        />
+        <Routes>
         {/* Routes with Layout (Header + Footer) */}
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
@@ -97,6 +101,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>
+      </GoogleMapsProvider>
     </BrowserRouter>
   );
 }

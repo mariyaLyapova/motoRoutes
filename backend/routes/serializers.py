@@ -152,6 +152,7 @@ class RouteListSerializer(serializers.ModelSerializer):
     locations_count = serializers.SerializerMethodField()
     images_count = serializers.SerializerMethodField()
     comments_count = serializers.SerializerMethodField()
+    first_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Route
@@ -166,6 +167,7 @@ class RouteListSerializer(serializers.ModelSerializer):
             'locations_count',
             'images_count',
             'comments_count',
+            'first_image',
             'created_at',
         ]
         read_only_fields = ['id', 'created_at', 'creator']
@@ -178,6 +180,16 @@ class RouteListSerializer(serializers.ModelSerializer):
 
     def get_comments_count(self, obj):
         return obj.comments.count()
+
+    def get_first_image(self, obj):
+        """Get the first image URL for the route card header."""
+        first_image = obj.images.first()
+        if first_image:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(first_image.image.url)
+            return first_image.image.url
+        return None
 
 
 class RouteCreateSerializer(serializers.ModelSerializer):

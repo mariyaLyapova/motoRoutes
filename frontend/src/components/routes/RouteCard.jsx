@@ -11,75 +11,91 @@ export default function RouteCard({ route }) {
     return colors[difficulty] || '#95a5a6';
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
+  const getGradient = (difficulty) => {
+    const gradients = {
+      easy: 'linear-gradient(135deg, #56ab2f 0%, #a8e063 100%)',
+      moderate: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+      hard: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+      expert: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+    };
+    return gradients[difficulty] || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
   };
 
+  const getRouteIcon = (difficulty) => {
+    const icons = {
+      easy: '🛣️',
+      moderate: '🏞️',
+      hard: '🏔️',
+      expert: '⛰️',
+    };
+    return icons[difficulty] || '🏍️';
+  };
+
+  const cardImageStyle = route.first_image
+    ? {
+        backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5)), url(${route.first_image})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }
+    : {
+        background: getGradient(route.difficulty),
+      };
+
   return (
-    <div className="route-card">
-      <div className="route-card-header">
-        <h3 className="route-title">
-          <Link to={`/routes/${route.id}`}>{route.title}</Link>
-        </h3>
-        <span
-          className="difficulty-badge"
-          style={{ backgroundColor: getDifficultyColor(route.difficulty) }}
-        >
-          {route.difficulty}
-        </span>
-      </div>
-
-      <p className="route-description">
-        {route.description.length > 150
-          ? route.description.substring(0, 150) + '...'
-          : route.description}
-      </p>
-
-      <div className="route-stats">
-        <div className="stat">
-          <span className="stat-icon">📏</span>
-          <span className="stat-value">{route.distance} km</span>
-        </div>
-
-        {route.duration_days && (
-          <div className="stat">
-            <span className="stat-icon">📅</span>
-            <span className="stat-value">{route.duration_days} {route.duration_days === 1 ? 'day' : 'days'}</span>
-          </div>
+    <Link to={`/routes/${route.id}`} className="route-card">
+      <div className="card-image" style={cardImageStyle}>
+        {!route.first_image && (
+          <div className="card-image-emoji">{getRouteIcon(route.difficulty)}</div>
         )}
-
-        <div className="stat">
-          <span className="stat-icon">📍</span>
-          <span className="stat-value">{route.locations_count || 0} POIs</span>
-        </div>
-
-        <div className="stat">
-          <span className="stat-icon">📸</span>
-          <span className="stat-value">{route.images_count || 0} photos</span>
-        </div>
-
-        <div className="stat">
-          <span className="stat-icon">💬</span>
-          <span className="stat-value">{route.comments_count || 0} comments</span>
+        <div className="card-image-overlay">
+          <h3 className="card-title">
+            {route.title}
+          </h3>
+          <span
+            className="difficulty-badge"
+            style={{ backgroundColor: getDifficultyColor(route.difficulty) }}
+          >
+            {route.difficulty}
+          </span>
         </div>
       </div>
 
-      <div className="route-footer">
-        <div className="route-creator">
-          <span className="creator-label">By:</span>
-          <span className="creator-name">{route.creator?.username || 'Unknown'}</span>
-        </div>
-        <div className="route-date">{formatDate(route.created_at)}</div>
-      </div>
+      <div className="card-content">
+        <p className="route-description">
+          {route.description.length > 100
+            ? route.description.substring(0, 100) + '...'
+            : route.description}
+        </p>
 
-      <Link to={`/routes/${route.id}`} className="view-route-btn">
-        View Details
-      </Link>
-    </div>
+        <div className="route-stats">
+          <div className="stat">
+            <span className="stat-icon">📏</span>
+            <span className="stat-value">{route.distance} km</span>
+          </div>
+
+          {route.duration_days && (
+            <div className="stat">
+              <span className="stat-icon">📅</span>
+              <span className="stat-value">{route.duration_days} {route.duration_days === 1 ? 'day' : 'days'}</span>
+            </div>
+          )}
+
+          <div className="stat">
+            <span className="stat-icon">📍</span>
+            <span className="stat-value">{route.locations_count || 0}</span>
+          </div>
+
+          <div className="stat">
+            <span className="stat-icon">📸</span>
+            <span className="stat-value">{route.images_count || 0}</span>
+          </div>
+
+          <div className="stat">
+            <span className="stat-icon">💬</span>
+            <span className="stat-value">{route.comments_count || 0}</span>
+          </div>
+        </div>
+      </div>
+    </Link>
   );
 }

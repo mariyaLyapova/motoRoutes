@@ -6,6 +6,7 @@ import { useAuth } from '../hooks/useAuth';
 import LocationList from '../components/locations/LocationList';
 import ImageGallery from '../components/images/ImageGallery';
 import CommentList from '../components/comments/CommentList';
+import RouteMap from '../components/maps/RouteMap';
 
 export default function RouteDetailPage() {
   const { id } = useParams();
@@ -105,135 +106,158 @@ export default function RouteDetailPage() {
   return (
     <div className="route-detail-page">
       <div className="container">
-        <div className="breadcrumb">
-          <Link to="/routes">Routes</Link>
-          <span> / </span>
-          <span>{route.title}</span>
-        </div>
-
-        <div className="route-detail-header">
-          <div className="header-left">
-            <h1>{route.title}</h1>
-            <div className="route-meta">
-              <span
-                className="difficulty-badge"
-                style={{ backgroundColor: getDifficultyColor(route.difficulty) }}
-              >
-                {route.difficulty}
-              </span>
-              <span className="meta-item">
-                📏 {route.distance} km
-              </span>
-              <span className="meta-item">
-                📅 {formatDate(route.created_at)}
-              </span>
-              <span className="meta-item">
-                👤 By {route.creator ? (
-                  <Link to={`/users/${route.creator.id}`} className="creator-link">
-                    {route.creator.username}
-                  </Link>
-                ) : (
-                  'Unknown'
-                )}
-              </span>
+        <div className="magazine-design">
+          {/* Magazine Header */}
+          <div className="magazine-header">
+            <div className="magazine-breadcrumb">
+              <Link to="/routes">Routes</Link>
+              <span> / </span>
+              <span>{route.title}</span>
             </div>
-          </div>
 
-          {isCreator && (
-            <div className="header-actions">
-              <Link to={`/routes/${id}/edit`} className="btn-edit">
-                Edit
-              </Link>
-              <button
-                onClick={handleDelete}
-                disabled={deleteLoading}
-                className="btn-delete"
-              >
-                {deleteLoading ? 'Deleting...' : 'Delete'}
-              </button>
-            </div>
-          )}
-        </div>
+            <h1 className="magazine-title">{route.title}</h1>
+            <p className="magazine-subtitle">{route.description.length > 150 ? route.description.substring(0, 150) + '...' : route.description}</p>
 
-        <div className="route-detail-content">
-          <div className="main-column">
-            <section className="route-section">
-              <h2>Description</h2>
-              <p className="route-description">{route.description}</p>
-            </section>
-
-            <section className="route-section">
-              <LocationList
-                locations={route.locations}
-                routeId={id}
-                isCreator={isCreator}
-                onUpdate={fetchRouteDetail}
-              />
-            </section>
-
-            <section className="route-section">
-              <ImageGallery
-                images={route.images}
-                routeId={id}
-                isCreator={isCreator}
-                onUpdate={fetchRouteDetail}
-              />
-            </section>
-
-            <section className="route-section">
-              <CommentList
-                comments={route.comments}
-                routeId={id}
-                onUpdate={fetchRouteDetail}
-              />
-            </section>
-          </div>
-
-          <div className="sidebar-column">
-            <div className="stats-card">
-              <h3>Route Statistics</h3>
-              <div className="stat-row">
-                <span className="stat-label">Distance</span>
-                <span className="stat-value">{route.distance} km</span>
+            <div className="magazine-meta">
+              <div className="magazine-stat-box">
+                <div className="magazine-stat-label">Distance</div>
+                <div className="magazine-stat-value">{route.distance}</div>
+                <div className="magazine-stat-unit">kilometers</div>
               </div>
+
+              <div className="magazine-divider"></div>
+
               {route.duration_days && (
-                <div className="stat-row">
-                  <span className="stat-label">Duration</span>
-                  <span className="stat-value">{route.duration_days} {route.duration_days === 1 ? 'day' : 'days'}</span>
-                </div>
-              )}
-              <div className="stat-row">
-                <span className="stat-label">Difficulty</span>
-                <span
-                  className="stat-value"
-                  style={{ color: getDifficultyColor(route.difficulty) }}
-                >
-                  {route.difficulty}
-                </span>
-              </div>
-              <div className="stat-row">
-                <span className="stat-label">POIs</span>
-                <span className="stat-value">{route.locations?.length || 0}</span>
-              </div>
-              <div className="stat-row">
-                <span className="stat-label">Photos</span>
-                <span className="stat-value">{route.images?.length || 0}</span>
-              </div>
-              <div className="stat-row">
-                <span className="stat-label">Comments</span>
-                <span className="stat-value">{route.comments?.length || 0}</span>
-              </div>
-            </div>
-
-            <div className="creator-card">
-              <h3>Created By</h3>
-              <div className="creator-info">
-                <div className="creator-name">{route.creator?.username || 'Unknown'}</div>
-                {route.creator?.motorcycle_brand && (
-                  <div className="creator-bike">
-                    🏍️ {route.creator.motorcycle_brand} {route.creator.motorcycle_model}
+                <>
+                  <div className="magazine-stat-box">
+                    <div className="magazine-stat-label">Duration</div>
+                    <div className="magazine-stat-value">{route.duration_days}</div>
+                    <div className="magazine-stat-unit">{route.duration_days === 1 ? 'day' : 'days'}</div>
                   </div>
-                )}
+                  <div className="magazine-divider"></div>
+                </>
+              )}
+
+              <div className="magazine-stat-box">
+                <div className="magazine-stat-label">Difficulty</div>
+                <div className="magazine-stat-value" style={{ color: getDifficultyColor(route.difficulty) }}>
+                  {route.difficulty}
+                </div>
+              </div>
+
+              <div className="magazine-divider"></div>
+
+              <div className="magazine-stat-box">
+                <div className="magazine-stat-label">Creator</div>
+                <div className="magazine-stat-creator">
+                  <Link to={`/users/${route.creator?.id}`}>{route.creator?.username || 'Unknown'}</Link>
+                </div>
+              </div>
+
+              {isCreator && (
+                <>
+                  <div className="magazine-divider"></div>
+                  <div className="header-actions">
+                    <Link to={`/routes/${id}/edit`} className="btn-edit">
+                      Edit
+                    </Link>
+                    <button
+                      onClick={handleDelete}
+                      disabled={deleteLoading}
+                      className="btn-delete"
+                    >
+                      {deleteLoading ? 'Deleting...' : 'Delete'}
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Magazine Body */}
+          <div className="magazine-body">
+            <div className="magazine-layout">
+              {/* Main Content */}
+              <div className="main-content">
+                {/* Full Description */}
+                <section className="content-section">
+                  <h2 className="section-title">Description</h2>
+                  <p className="description-text">{route.description}</p>
+                </section>
+
+                {/* Route Map */}
+                <section className="content-section">
+                  <h2 className="section-title">Route Map</h2>
+                  <RouteMap
+                    route={route}
+                    locations={route.locations || []}
+                    height="600px"
+                  />
+                </section>
+
+                {/* Points of Interest */}
+                <section className="content-section">
+                  <LocationList
+                    locations={route.locations}
+                    routeId={id}
+                    isCreator={isCreator}
+                    onUpdate={fetchRouteDetail}
+                  />
+                </section>
+
+                {/* Photos */}
+                <section className="content-section">
+                  <ImageGallery
+                    images={route.images}
+                    routeId={id}
+                    isCreator={isCreator}
+                    onUpdate={fetchRouteDetail}
+                  />
+                </section>
+
+                {/* Comments */}
+                <section className="content-section">
+                  <CommentList
+                    comments={route.comments}
+                    routeId={id}
+                    onUpdate={fetchRouteDetail}
+                  />
+                </section>
+              </div>
+
+              {/* Sidebar */}
+              <div className="sidebar">
+                <div className="stats-card">
+                  <h4>Route Details</h4>
+                  <div className="stats-row">
+                    <span className="stats-label">Points of Interest</span>
+                    <strong className="stats-value">{route.locations?.length || 0}</strong>
+                  </div>
+                  <div className="stats-row">
+                    <span className="stats-label">Photos</span>
+                    <strong className="stats-value">{route.images?.length || 0}</strong>
+                  </div>
+                  <div className="stats-row">
+                    <span className="stats-label">Comments</span>
+                    <strong className="stats-value">{route.comments?.length || 0}</strong>
+                  </div>
+                </div>
+
+                <div className="creator-card">
+                  <h4>Created By</h4>
+                  <div className="creator-name">
+                    <Link to={`/users/${route.creator?.id}`}>{route.creator?.username || 'Unknown'}</Link>
+                  </div>
+                  {route.creator?.motorcycle_brand && (
+                    <>
+                      <div className="creator-bike">🏍️ {route.creator.motorcycle_brand}</div>
+                      {route.creator.motorcycle_model && (
+                        <div className="creator-bike">{route.creator.motorcycle_model} {route.creator.motorcycle_year || ''}</div>
+                      )}
+                    </>
+                  )}
+                  <div className="creator-date">Created on {formatDate(route.created_at)}</div>
+                </div>
               </div>
             </div>
           </div>

@@ -28,7 +28,7 @@ class RouteListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.AllowAny]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title', 'description']
-    filterset_fields = ['difficulty']
+    filterset_fields = ['difficulty', 'duration_days']
     ordering_fields = ['created_at', 'distance', 'title']
     ordering = ['-created_at']
 

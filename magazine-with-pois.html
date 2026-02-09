@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magazine Layout with Points of Interest</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: #f8f9fa;
+            padding: 40px 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Magazine Layout */
+        .magazine-design {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .magazine-header {
+            padding: 50px 60px 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .magazine-breadcrumb {
+            color: #999;
+            font-size: 13px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .magazine-breadcrumb a {
+            color: #4a90e2;
+            text-decoration: none;
+        }
+
+        .magazine-breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .magazine-title {
+            font-size: 48px;
+            font-weight: 800;
+            color: #222;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .magazine-subtitle {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .magazine-meta {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .magazine-stat-box {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .magazine-stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #999;
+            font-weight: 600;
+        }
+
+        .magazine-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .divider {
+            width: 1px;
+            height: 60px;
+            background: #eee;
+        }
+
+        .magazine-body {
+            padding: 40px 60px;
+        }
+
+        /* Content sections */
+        .content-section {
+            margin-bottom: 50px;
+        }
+
+        .content-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .description-text {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #444;
+            margin-bottom: 20px;
+        }
+
+        /* Points of Interest List */
+        .poi-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .poi-item {
+            border-left: 3px solid #4a90e2;
+            padding-left: 20px;
+            transition: all 0.2s;
+        }
+
+        .poi-item:hover {
+            border-left-color: #357abd;
+            padding-left: 25px;
+        }
+
+        .poi-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .poi-description {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* Image Gallery */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .image-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .image-card:hover {
+            transform: scale(1.03);
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        .image-caption {
+            padding: 12px;
+            background: #f8f9fa;
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Comments */
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .comment-card {
+            border-left: 3px solid #4a90e2;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: #333;
+            font-size: 15px;
+        }
+
+        .comment-date {
+            color: #999;
+            font-size: 13px;
+        }
+
+        .comment-text {
+            color: #555;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        /* Stats Sidebar */
+        .magazine-layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 40px;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .stats-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .stats-card h4 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+        }
+
+        .stats-row:last-child {
+            border-bottom: none;
+        }
+
+        .stats-label {
+            color: #666;
+        }
+
+        .stats-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .creator-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+        }
+
+        .creator-card h4 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .creator-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .creator-bike {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .creator-date {
+            color: #999;
+            font-size: 13px;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .badge-hard { background: #e67e22; }
+
+        /* Add Route Button */
+        .add-poi-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #4a90e2;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 25px;
+            transition: background 0.2s;
+        }
+
+        .add-poi-btn:hover {
+            background: #357abd;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .magazine-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            .magazine-header {
+                padding: 30px 30px 20px;
+            }
+
+            .magazine-title {
+                font-size: 36px;
+            }
+
+            .magazine-body {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="magazine-design">
+            <!-- Header Section -->
+            <div class="magazine-header">
+                <div class="magazine-breadcrumb">
+                    <a href="#">Routes</a>
+                    <span>/</span>
+                    <span>Alpine Mountain Pass</span>
+                </div>
+
+                <h1 class="magazine-title">Alpine Mountain Pass</h1>
+                <p class="magazine-subtitle">A challenging route through the Swiss Alps with breathtaking views and tight hairpin turns</p>
+
+                <div class="magazine-meta">
+                    <div class="magazine-stat-box">
+                        <div class="magazine-stat-label">Distance</div>
+                        <div class="magazine-stat-value">245</div>
+                        <div style="font-size: 12px; color: #999;">kilometers</div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="magazine-stat-box">
+                        <div class="magazine-stat-label">Duration</div>
+                        <div class="magazine-stat-value">3</div>
+                        <div style="font-size: 12px; color: #999;">days</div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="magazine-stat-box">
+                        <div class="magazine-stat-label">Difficulty</div>
+                        <div class="magazine-stat-value" style="color: #e67e22;">Hard</div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="magazine-stat-box">
+                        <div class="magazine-stat-label">Creator</div>
+                        <div style="font-size: 16px; font-weight: 600; color: #4a90e2;">riderlord</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Body Section -->
+            <div class="magazine-body">
+                <div class="magazine-layout">
+                    <!-- Main Content -->
+                    <div>
+                        <!-- Description -->
+                        <div class="content-section">
+                            <h2 class="section-title">Description</h2>
+                            <p class="description-text">
+                                A challenging route through the Swiss Alps with breathtaking views and tight hairpin turns. Perfect for experienced riders looking for an adventure through mountain passes.
+                            </p>
+                            <p class="description-text">
+                                This route combines technical riding with stunning alpine scenery, offering an unforgettable experience for those who dare to take on its challenges. The winding roads through high mountain passes provide both excitement and natural beauty.
+                            </p>
+                        </div>
+
+                        <!-- Points of Interest -->
+                        <div class="content-section">
+                            <h2 class="section-title">Points of Interest</h2>
+                            <a href="#" class="add-poi-btn">+ Add Location</a>
+
+                            <div class="poi-list">
+                                <div class="poi-item">
+                                    <div class="poi-title">🏔️ Grimsel Pass</div>
+                                    <div class="poi-description">
+                                        Stunning mountain pass with panoramic views of the Swiss Alps. Perfect spot for photos and a break.
+                                    </div>
+                                </div>
+
+                                <div class="poi-item">
+                                    <div class="poi-title">☕ Mountain Café</div>
+                                    <div class="poi-description">
+                                        Cozy café with traditional Swiss food and excellent coffee. Great place to refuel and rest.
+                                    </div>
+                                </div>
+
+                                <div class="poi-item">
+                                    <div class="poi-title">⛽ Alpine Gas Station</div>
+                                    <div class="poi-description">
+                                        Last gas station before the high mountain passes. Make sure to fill up here!
+                                    </div>
+                                </div>
+
+                                <div class="poi-item">
+                                    <div class="poi-title">🏨 Alpine Lodge</div>
+                                    <div class="poi-description">
+                                        Beautiful mountain hotel with stunning views. Perfect place to stay overnight on your journey.
+                                    </div>
+                                </div>
+
+                                <div class="poi-item">
+                                    <div class="poi-title">📸 Eagle's Nest Viewpoint</div>
+                                    <div class="poi-description">
+                                        Spectacular viewpoint overlooking the valley. Don't miss this photo opportunity!
+                                    </div>
+                                </div>
+
+                                <div class="poi-item">
+                                    <div class="poi-title">🅿️ Summit Parking</div>
+                                    <div class="poi-description">
+                                        Secure parking area at the summit with restroom facilities and picnic area.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Photos -->
+                        <div class="content-section">
+                            <h2 class="section-title">Photos</h2>
+                            <a href="#" class="add-poi-btn">+ Upload Photo</a>
+
+                            <div class="image-gallery">
+                                <div class="image-card">
+                                    <div class="image-placeholder">🏔️</div>
+                                    <div class="image-caption">Mountain pass view</div>
+                                </div>
+                                <div class="image-card">
+                                    <div class="image-placeholder" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">🌄</div>
+                                    <div class="image-caption">Sunrise at the summit</div>
+                                </div>
+                                <div class="image-card">
+                                    <div class="image-placeholder" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">🛣️</div>
+                                    <div class="image-caption">Winding mountain road</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Comments -->
+                        <div class="content-section">
+                            <h2 class="section-title">Comments</h2>
+
+                            <div class="comments-list">
+                                <div class="comment-card">
+                                    <div class="comment-header">
+                                        <span class="comment-author">mountainrider</span>
+                                        <span class="comment-date">2 days ago</span>
+                                    </div>
+                                    <p class="comment-text">
+                                        Amazing route! The views are absolutely spectacular. Make sure to check the weather before you go.
+                                    </p>
+                                </div>
+
+                                <div class="comment-card">
+                                    <div class="comment-header">
+                                        <span class="comment-author">swisstourer</span>
+                                        <span class="comment-date">1 week ago</span>
+                                    </div>
+                                    <p class="comment-text">
+                                        Did this route last summer. The hairpin turns are challenging but so much fun! Highly recommend stopping at the Mountain Café.
+                                    </p>
+                                </div>
+
+                                <div class="comment-card">
+                                    <div class="comment-header">
+                                        <span class="comment-author">alpineexplorer</span>
+                                        <span class="comment-date">2 weeks ago</span>
+                                    </div>
+                                    <p class="comment-text">
+                                        One of the best routes I've ever done. The scenery is breathtaking and the roads are in excellent condition.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="sidebar">
+                        <div class="stats-card">
+                            <h4>Route Details</h4>
+                            <div class="stats-row">
+                                <span class="stats-label">Points of Interest</span>
+                                <strong class="stats-value">12</strong>
+                            </div>
+                            <div class="stats-row">
+                                <span class="stats-label">Photos</span>
+                                <strong class="stats-value">24</strong>
+                            </div>
+                            <div class="stats-row">
+                                <span class="stats-label">Comments</span>
+                                <strong class="stats-value">8</strong>
+                            </div>
+                        </div>
+
+                        <div class="creator-card">
+                            <h4>Created By</h4>
+                            <div class="creator-name">riderlord</div>
+                            <div class="creator-bike">🏍️ Harley-Davidson</div>
+                            <div class="creator-bike">Road King 2019</div>
+                            <div class="creator-date" style="margin-top: 10px;">Created on Jan 15, 2026</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

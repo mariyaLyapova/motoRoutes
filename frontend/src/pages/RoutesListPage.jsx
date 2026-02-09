@@ -15,6 +15,7 @@ export default function RoutesListPage() {
   const [filters, setFilters] = useState({
     difficulty: '',
     search: '',
+    duration_days: '',
   });
 
   useEffect(() => {
@@ -32,6 +33,9 @@ export default function RoutesListPage() {
       }
       if (filters.search) {
         filterParams.search = filters.search;
+      }
+      if (filters.duration_days) {
+        filterParams.duration_days = filters.duration_days;
       }
 
       const response = await routeService.getRoutes(currentPage, filterParams);
@@ -126,6 +130,26 @@ export default function RoutesListPage() {
               <option value="moderate">Moderate</option>
               <option value="hard">Hard</option>
               <option value="expert">Expert</option>
+            </select>
+          </div>
+
+          <div className="filter-group">
+            <label htmlFor="duration_days">Duration (days):</label>
+            <select
+              id="duration_days"
+              name="duration_days"
+              value={filters.duration_days}
+              onChange={handleFilterChange}
+              className="filter-select"
+            >
+              <option value="">All</option>
+              <option value="1">1 day</option>
+              <option value="2">2 days</option>
+              <option value="3">3 days</option>
+              <option value="4">4 days</option>
+              <option value="5">5 days</option>
+              <option value="6">6 days</option>
+              <option value="7">7+ days</option>
             </select>
           </div>
         </div>

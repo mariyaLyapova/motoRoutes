@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import toast from 'react-hot-toast';
+import RouteEditor from '../maps/RouteEditor';
 
 export default function RouteForm({ initialData, onSubmit, submitLabel, showImageUpload = true }) {
   const [formData, setFormData] = useState({
@@ -17,6 +18,8 @@ export default function RouteForm({ initialData, onSubmit, submitLabel, showImag
   const [imagePreviews, setImagePreviews] = useState([]);
   const [existingImages, setExistingImages] = useState(initialData?.images || []);
   const [isDragging, setIsDragging] = useState(false);
+  const [useMapEditor, setUseMapEditor] = useState(true);
+  const [routeGeojson, setRouteGeojson] = useState(initialData?.geojson || null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,6 +35,43 @@ export default function RouteForm({ initialData, onSubmit, submitLabel, showImag
       }));
     }
   };
+
+  const handleRouteChange = useCallback((geojson) => {
+    setRouteGeojson(geojson);
+    if (geojson) {
+      setFormData((prev) => ({
+        ...prev,
+        geojson: JSON.stringify(geojson, null, 2),
+      }));
+      // Clear geojson error if it exists
+      setErrors((prev) => {
+        if (prev.geojson) {
+          const { geojson: _, ...rest } = prev;
+          return rest;
+        }
+        return prev;
+      });
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        geojson: '',
+      }));
+    }
+  }, []);
+
+  const handleDistanceChange = useCallback((calculatedDistance) => {
+    setFormData((prev) => ({
+      ...prev,
+      distance: calculatedDistance,
+    }));
+    // Clear distance error if it exists
+    if (errors.distance) {
+      setErrors((prev) => ({
+        ...prev,
+        distance: '',
+      }));
+    }
+  }, [errors.distance]);
 
   const processFiles = (files) => {
     const fileArray = Array.from(files);
@@ -118,7 +158,8 @@ export default function RouteForm({ initialData, onSubmit, submitLabel, showImag
       newErrors.description = 'Description is required';
     }
 
-    if (!formData.distance || formData.distance <= 0) {
+    // Distance is optional, but if provided, must be valid
+    if (formData.distance && formData.distance <= 0) {
       newErrors.distance = 'Distance must be greater than 0';
     }
 
@@ -160,7 +201,7 @@ export default function RouteForm({ initialData, onSubmit, submitLabel, showImag
         title: formData.title.trim(),
         description: formData.description.trim(),
         difficulty: formData.difficulty,
-        distance: parseFloat(formData.distance),
+        distance: formData.distance ? parseFloat(formData.distance) : null,
         duration_days: formData.duration_days ? parseInt(formData.duration_days) : null,
         geojson: JSON.parse(formData.geojson),
         images: selectedImages,
@@ -256,24 +297,6 @@ export default function RouteForm({ initialData, onSubmit, submitLabel, showImag
         </div>
 
         <div className="form-group">
-          <label htmlFor="distance">
-            Distance (km) <span className="required">*</span>
-          </label>
-          <input
-            type="number"
-            id="distance"
-            name="distance"
-            value={formData.distance}
-            onChange={handleChange}
-            placeholder="0"
-            step="0.1"
-            min="0"
-            className={errors.distance ? 'error' : ''}
-          />
-          {errors.distance && <span className="error-text">{errors.distance}</span>}
-        </div>
-
-        <div className="form-group">
           <label htmlFor="duration_days">
             Trip Duration (days)
           </label>
@@ -293,30 +316,61 @@ export default function RouteForm({ initialData, onSubmit, submitLabel, showImag
 
       <div className="form-row">
         <div className="form-group">
-          <label htmlFor="geojson">
-            Route Path (GeoJSON) <span className="required">*</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+            <label htmlFor="geojson">
+              Route Path <span className="required">*</span>
+            </label>
             <button
               type="button"
-              onClick={fillSampleGeoJSON}
-              className="sample-btn"
+              onClick={() => setUseMapEditor(!useMapEditor)}
+              style={{
+                padding: '6px 12px',
+                background: '#6c757d',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: '500',
+              }}
             >
-              Fill Sample
+              {useMapEditor ? '📝 Switch to Text Editor' : '🗺️ Switch to Map Editor'}
             </button>
-          </label>
-          <textarea
-            id="geojson"
-            name="geojson"
-            value={formData.geojson}
-            onChange={handleChange}
-            placeholder='{"type": "LineString", "coordinates": [[-122.4194, 37.7749], [-122.4084, 37.7849]]}'
-            rows="8"
-            className={`geojson-input ${errors.geojson ? 'error' : ''}`}
-          />
-          {errors.geojson && <span className="error-text">{errors.geojson}</span>}
-          <div className="help-text">
-            Enter a GeoJSON LineString with coordinates in [longitude, latitude] format.
-            Map drawing will be added in a future update.
           </div>
+
+          {useMapEditor ? (
+            <RouteEditor
+              value={formData.geojson}
+              onChange={handleRouteChange}
+              onDistanceChange={handleDistanceChange}
+              height="500px"
+            />
+          ) : (
+            <>
+              <div style={{ marginBottom: '10px' }}>
+                <button
+                  type="button"
+                  onClick={fillSampleGeoJSON}
+                  className="sample-btn"
+                >
+                  Fill Sample
+                </button>
+              </div>
+              <textarea
+                id="geojson"
+                name="geojson"
+                value={formData.geojson}
+                onChange={handleChange}
+                placeholder='{"type": "LineString", "coordinates": [[-122.4194, 37.7749], [-122.4084, 37.7849]]}'
+                rows="8"
+                className={`geojson-input ${errors.geojson ? 'error' : ''}`}
+              />
+              <div className="help-text">
+                Enter a GeoJSON LineString with coordinates in [longitude, latitude] format.
+              </div>
+            </>
+          )}
+          {errors.geojson && <span className="error-text">{errors.geojson}</span>}
         </div>
       </div>
 
