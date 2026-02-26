@@ -9,7 +9,6 @@ export default function Header() {
       <div className="header-container">
         <div className="header-left">
           <Link to="/" className="logo">
-            <span className="logo-icon">🏍️</span>
             <span className="logo-text">MotoRoutes</span>
           </Link>
 
