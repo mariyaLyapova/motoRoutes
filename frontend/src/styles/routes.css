@@ -63,22 +63,24 @@
 
 .search-input:focus {
   outline: none;
-  border-color: #4a90e2;
+  border-color: #ff6b35;
 }
 
 .search-btn {
   padding: 10px 25px;
-  background-color: #4a90e2;
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
   color: white;
   border: none;
   border-radius: 6px;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
 }
 
 .search-btn:hover {
-  background-color: #357abd;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
 }
 
 .filter-group {
@@ -106,7 +108,7 @@
 
 .filter-select:focus {
   outline: none;
-  border-color: #4a90e2;
+  border-color: #ff6b35;
 }
 
 /* Routes Grid */
@@ -142,7 +144,7 @@
 
 .card-image {
   height: 140px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
   position: relative;
   display: flex;
   align-items: flex-end;
@@ -243,17 +245,19 @@
 
 .pagination-btn {
   padding: 10px 20px;
-  background-color: #4a90e2;
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
   color: white;
   border: none;
   border-radius: 6px;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
 }
 
 .pagination-btn:hover:not(:disabled) {
-  background-color: #357abd;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
 }
 
 .pagination-btn:disabled {

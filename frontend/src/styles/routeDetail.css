@@ -38,11 +38,12 @@
 }
 
 .magazine-breadcrumb a {
-  color: #4a90e2;
+  color: #ff6b35;
   text-decoration: none;
 }
 
 .magazine-breadcrumb a:hover {
+  color: #ff6b35;
   text-decoration: underline;
 }
 
@@ -100,11 +101,12 @@
 }
 
 .magazine-stat-creator a {
-  color: #4a90e2;
+  color: #ff6b35;
   text-decoration: none;
 }
 
 .magazine-stat-creator a:hover {
+  color: #ff6b35;
   text-decoration: underline;
 }
 
@@ -132,12 +134,14 @@
 }
 
 .btn-edit {
-  background-color: #4a90e2;
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
   color: white;
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
 }
 
 .btn-edit:hover {
-  background-color: #357abd;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
 }
 
 .btn-delete {
@@ -254,11 +258,12 @@
 }
 
 .creator-name a {
-  color: #4a90e2;
+  color: #ff6b35;
   text-decoration: none;
 }
 
 .creator-name a:hover {
+  color: #ff6b35;
   text-decoration: underline;
 }
 
@@ -298,12 +303,13 @@
 }
 
 .back-link {
-  color: #4a90e2;
+  color: #ff6b35;
   text-decoration: none;
   font-weight: 500;
 }
 
 .back-link:hover {
+  color: #ff6b35;
   text-decoration: underline;
 }
 
