@@ -3,7 +3,7 @@
 .route-detail-page {
   background-color: #f8f9fa;
   min-height: calc(100vh - 200px);
-  padding: 40px 0;
+  padding: 20px 0;
 }
 
 .container {
@@ -24,14 +24,14 @@
 /* Magazine Header */
 
 .magazine-header {
-  padding: 50px 60px 30px;
+  padding: 30px 40px 20px;
   border-bottom: 1px solid #eee;
 }
 
 .magazine-breadcrumb {
   color: #999;
   font-size: 13px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -50,14 +50,14 @@
   font-size: 48px;
   font-weight: 800;
   color: #222;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   line-height: 1.2;
 }
 
 .magazine-subtitle {
   font-size: 20px;
   color: #666;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   font-weight: 400;
   line-height: 1.5;
 }
@@ -157,13 +157,13 @@
 /* Magazine Body */
 
 .magazine-body {
-  padding: 40px 60px;
+  padding: 25px 40px;
 }
 
 .magazine-layout {
   display: grid;
   grid-template-columns: 1fr 320px;
-  gap: 40px;
+  gap: 30px;
 }
 
 .main-content {
@@ -174,7 +174,7 @@
 /* Content Sections */
 
 .content-section {
-  margin-bottom: 50px;
+  margin-bottom: 30px;
 }
 
 .content-section:last-child {
@@ -185,8 +185,8 @@
   font-size: 28px;
   font-weight: 700;
   color: #222;
-  margin-bottom: 25px;
-  padding-bottom: 15px;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
   border-bottom: 2px solid #f0f0f0;
 }
 
@@ -194,7 +194,7 @@
   font-size: 18px;
   line-height: 1.8;
   color: #444;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 /* Sidebar */
@@ -205,13 +205,13 @@
   height: fit-content;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
 }
 
 .stats-card,
 .creator-card {
   background: #f8f9fa;
-  padding: 25px;
+  padding: 20px;
   border-radius: 8px;
 }
 
@@ -221,14 +221,14 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   color: #666;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   font-weight: 600;
 }
 
 .stats-row {
   display: flex;
   justify-content: space-between;
-  padding: 12px 0;
+  padding: 10px 0;
   border-bottom: 1px solid #e0e0e0;
   font-size: 14px;
 }
@@ -250,7 +250,7 @@
   font-size: 18px;
   font-weight: 600;
   color: #333;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .creator-name a {
@@ -271,8 +271,8 @@
 .creator-date {
   color: #999;
   font-size: 13px;
-  margin-top: 15px;
-  padding-top: 15px;
+  margin-top: 12px;
+  padding-top: 12px;
   border-top: 1px solid #e0e0e0;
 }
 
@@ -281,14 +281,14 @@
 .loading-state,
 .empty-state {
   text-align: center;
-  padding: 60px 20px;
+  padding: 40px 20px;
   color: #666;
   font-size: 18px;
 }
 
 .error-state {
   text-align: center;
-  padding: 60px 20px;
+  padding: 40px 20px;
   color: #666;
 }
 
